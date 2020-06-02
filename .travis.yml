@@ -1,0 +1,42 @@
+os:
+- linux
+dist: bionic
+language: python
+
+services:
+- docker
+
+env:
+  global:
+  - VERSION: 0.0.2
+
+stages:
+- name: test
+- name: build 
+- name: run
+  if : branch = master
+
+
+jobs:
+  include:
+  - stage: test
+    name: Run style, unit and integration tests
+    script:
+    - python scr/file.py
+    - python a.py
+  - stage: build 
+    name: testing building
+    script:
+    - echo Second time
+    - python a.py
+
+  - stage: run
+    name: testing master branch
+    script:
+    - docker run img
+    - docker tag img img:${VERSION}
+    - docker tag img img:latest
+    - docker images
+
+
+
